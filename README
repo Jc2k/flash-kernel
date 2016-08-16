@@ -16,8 +16,14 @@ The following systems are supported:
  - Buffalo Linkstation Live
  - Buffalo Linkstation Live, version 3 (LS-CHL)
  - Buffalo Linkstation Live with BitTorrent (LS-CHLv2)
- - Buffalo Linkstation Mini
- - Buffalo Linkstation Pro
+ - Buffalo Linkstation LS-QVL
+ - Buffalo Linkstation LS-VL
+ - Buffalo Linkstation LS-WSXL
+ - Buffalo Linkstation LS-WTGL
+ - Buffalo Linkstation LS-WVL
+ - Buffalo Linkstation LS-WXL
+ - Buffalo Linkstation Mini (LS-WSGL)
+ - Buffalo Linkstation Pro (LS-GL)
  - Buffalo Linkstation Pro (LS-XHL)
  - Buffalo/Revogear Kurobox Pro
  - D-Link DNS-323
@@ -52,6 +58,8 @@ The following systems are supported:
  - QNAP TS-410 and TS-410U Turbo NAS
  - QNAP TS-419P and TS-419U Turbo NAS
  - Seagate FreeAgent DockStar
+ - Seagate NAS (2 and 4 bay)
+ - Seagate Personal Cloud (1 and 2 bay)
  - SheevaPlug
  - SheevaPlug eSATA
  - Thecus N2100
@@ -67,6 +75,7 @@ Testsuite
 - - - - -
 
 Run the testsuite with:
+    FK_CHECKOUT=. ./test_db
     FK_CHECKOUT=. ./test_flash-kernel
     FK_CHECKOUT=. ./test_functions
 
@@ -106,7 +115,9 @@ The supported fields are:
   This option is ignored if a DTB is to be appended, via either DTB-Append or
   DTB-Append-From.
 
-* DTB-Id: (optional) specifies the name of the DTB file for this device
+* DTB-Id: (optional) specifies the name of the DTB file for this device. If
+  the value begins with a `!' then the field is a script which should be run.
+  The script must produce the DTB filename (and nothing else) on stdout.
 
 * DTB-Append: (optional) when yes the DTB specified by DTB-Id will be appended
   to the kernel image.
@@ -114,6 +125,8 @@ The supported fields are:
 * DTB-Append-From: (optional): Can be used instead of DTB-Append. The argument
   is a kernel version, if the kernel to be installed is at least this version
   then the DTB specified named by DTB-Id will be appended to the kernel image.
+  When adding or updating this field remember to consider whether the kernel
+  will require an update to its versioned Breaks: on flash-kernel.
 
 * U-Boot-Kernel-Address, U-Boot-Kernel-Entry-Point, U-Boot-Initrd-Address:
   (optional) address where to load in (physical) RAM the kernel, entry point
@@ -176,14 +189,36 @@ Configuration files currently supported:
 * /etc/flash-kernel/db allows overriding / adding fields from the Machine
   database (but it doesn't allow removing fields or entries).
 
+* /etc/flash-kernel/dtbs (directory). If a DTB matching DTB-Id is
+  found here then it will be used in preference to the one shipped by
+  the kernel being installed.
+
+* /etc/flash-kernels/bootscript (directory). The files referenced via
+  the Boot-Script-Name field are installed here.
+
 * /etc/flash-kernel/ubootenv.d can be used to add or override u-boot
   script snippets. See "Adding U-Boot Commands for Pre-Boot Execution"
   below for more details.
 
-* /etc/default/flash-kernel currently contains a single variable,
-  LINUX_KERNEL_CMDLINE, which should be used by bootscripts to set kernel
-  options.
-
+* /etc/default/flash-kernel currently contains the following variables:
+    - LINUX_KERNEL_CMDLINE, which should be used by bootscripts to set kernel
+      options, overriding the firmwares defaults (e.g. u-boot's ${bootargs}).
+    - LINUX_KERNEL_CMDLINE_DEFAULTS, which should be used by bootscripts to set
+      kernel options which should be overrideable by the firmware's defaults
+      (e.g. u-boot's ${bootargs}).
+    - NO_CREATE_DOT_BAK_FILES, which if set to "true" or "yes" will
+      prevent flash-kernel from creating backup ".bak" versions of
+      kernel, initrd, and dtb files when installing a new version. The
+      default is to create such backups to aid in recovery from
+      failed updates. If this option is enabled then more complex
+      methods or specialised hardware (e.g. JTAG) may be required to
+      recover.
+    - MTD_BACKUP_DIR, which if set, names a directory to which
+      flash-kernel will write copies of files which would not normally
+      be accessible in the regular filesystem (either written to a
+      rawflash partition or to a firmware partition which is not
+      normally mounted). If unset defaults to
+      /var/backups/flash-kernel. Set to "none" to disable.
 
 Adding U-Boot Commands for Pre-Boot Execution
 - - - - - - - - - - - - - - - - - - - - - - -

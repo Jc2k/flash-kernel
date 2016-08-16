@@ -1,33 +1,375 @@
-flash-kernel (3.35+deb8u3) stable; urgency=medium
+flash-kernel (3.60~bpo8+1) jessie-backports; urgency=medium
+
+  * Rebuild for jessie-backports.
+
+ -- Héctor Orón Martínez <zumbi@debian.org>  Sun, 20 Mar 2016 18:56:51 +0100
+
+flash-kernel (3.60) unstable; urgency=medium
 
   [ Karsten Merker ]
-  * Disable the use of modprobe and udevadm in the mtdblock() function
-    while running the testsuite.
+  * Add machine db entries for various sunxi-based systems
+    - Allwinner GT90H Quad Core Tablet (v4)
+    - Auxtek t003 A10s hdmi tv-stick
+    - Empire Electronix D709 tablet
+    - iNet-1
+    - INet-98V Rev 02
+    - NextThing C.H.I.P.
+    - Point of View Protab2-IPS9
+    - Q8 A13 Tablet
+    - Q8 A23 Tablet
+    - Q8 A33 Tablet
+    - Sinovoip BPI-M2
+    - Wits Pro A20 DKT
+    - Xunlong Orange Pi Plus
 
-  [ Ian Campbell ]
-  * Use /dev/mtdN when flashing, rather than needlessly going through the
-    mtdblock layer (which is problematic on some platforms/kernels).
-    (Closes: #794265)
+ -- Christian Perrier <bubulle@debian.org>  Tue, 01 Mar 2016 06:46:32 +0100
+
+flash-kernel (3.59) unstable; urgency=medium
 
   [ Uwe Kleine-König ]
   * use nandwrite when writing to nand flash. (Closes: #813995)
 
- -- Uwe Kleine-König <ukleinek@debian.org>  Thu, 10 Mar 2016 20:30:19 +0100
+  [ Martin Michlmayr ]
+  * Require --force when invoked by hand with a specific version which is not
+    the latest. (Closes: 807708)
 
-flash-kernel (3.35+deb8u2) stable; urgency=medium
+  [ Ian Campbell ]
+  * Support $LINUX_KERNEL_CMDLINE_DEFAULTS via /etc/defaults/flash-kernel. This
+    will be prepended to the ${bootargs} and can therefore be overridden by the
+    firmware configuration. Suggested as part of #813023.
+  * Fix debug logging intended to help with #781742.
+
+  [ Vagrant Cascadian ]
+  * Update db entry for Firefly-RK3288 to allow armmp-lpae.
+
+ -- Christian Perrier <bubulle@debian.org>  Mon, 22 Feb 2016 18:52:43 +0100
+
+flash-kernel (3.58) unstable; urgency=medium
+
+  [ Martin Michlmayr ]
+  * Add entries for Wandboard i.MX6 Dual Lite Board rev B1 and Quad
+    Board rev B1.  Thanks Heinrich Schuchardt. (Closes: #813893)
+  * Ensure FK_ETC_MACHINE isn't used when testing get_machine.
+    (Closes: #814710).
+
+ -- Christian Perrier <bubulle@debian.org>  Tue, 16 Feb 2016 07:01:25 +0100
+
+flash-kernel (3.57) unstable; urgency=medium
+
+  [ Colin Watson ]
+  * Use HTTPS for Vcs-Git URL.
+
+  [ Roger Shimizu ]
+  * Fix the install location for etc/README.dtbs
+  * Update kernel address for Buffalo Linkstation devices machine db.
+    (Closes: #810828)
+  * Update a few Buffalo Linkstation entries in machine db
+      The following device will be converted to DT in kernel 4.6:
+        - Buffalo Linkstation Pro/Live (LS-GL)
+      The following device will be supported by DT in kernel 4.6:
+        - Buffalo Linkstation LS-QVL (DT will be supported in kernel 4.6)
+      The following devicies' DT will be renamed in kernel 4.6:
+        - Buffalo Linkstation LS-VL
+        - Buffalo Linkstation LS-WSXL
+        - Buffalo Linkstation LS-WVL
+        - Buffalo Linkstation LS-WXL
+  * Update support status of Buffalo Linkstation devices in README
+
+  [ Martin Michlmayr ]
+  * Add Kernel-Flavors for Lamobo R1.  Thanks to Heinrich Schuchardt.
+    (Closes: #813927)
+  * Add new marvell kernel flavour as alternative for orion5x and
+    kirkwood.
+
+ -- Christian Perrier <bubulle@debian.org>  Fri, 12 Feb 2016 20:14:21 +0100
+
+flash-kernel (3.56) unstable; urgency=medium
+
+  [ Martin Michlmayr ]
+  * QNAP TS-109/TS-209 and TS-409: change the kernel address to be after
+    the ramdisk so the uncompressed kernel doesn't overwrite the ramdisk.
+    (Closes: #809476)
+
+  [ Vagrant Cascadian ]
+  * Update Cubieboard4 entry to generate uImage and uInitrd loadable by
+    the vendor u-boot, which doesn't support boot scripts.
+
+ -- Christian Perrier <bubulle@debian.org>  Thu, 28 Jan 2016 07:16:20 +0100
+
+flash-kernel (3.55) unstable; urgency=medium
+
+  [ Vagrant Cascadian ]
+  * Add a machine db entry for BeagleBoard-X15.
+
+ -- Christian Perrier <bubulle@debian.org>  Tue, 26 Jan 2016 09:15:32 +0100
+
+flash-kernel (3.54) unstable; urgency=medium
+
+  [ Martin Michlmayr ]
+  * Add test_db test suite to README.
+  * Remove lpae as kernel flavour from DB-MV784MP-GP since armmp-lpae
+    is listed already.
+  * Add support for Seagate NAS (2 and 4 bay) and Seagate Personal
+    Cloud (1 and 2 bay).
+
+ -- Christian Perrier <bubulle@debian.org>  Tue, 05 Jan 2016 06:51:38 +0100
+
+flash-kernel (3.53) unstable; urgency=medium
+
+  [ Vagrant Cascadian ]
+  * Add a machine db entry for Firefly-RK3288.
+
+ -- Christian Perrier <bubulle@debian.org>  Tue, 29 Dec 2015 09:30:38 +0100
+
+flash-kernel (3.52~bpo8+1) jessie-backports; urgency=medium
+
+  * Rebuild for jessie-backports.
+
+ -- Ian Campbell <ijc@debian.org>  Thu, 10 Dec 2015 08:23:49 +0000
+
+flash-kernel (3.52) unstable; urgency=medium
+
+  [ Eric Cooper ]
+  * Correctly test endianess on NSLU2 (Closes: #804359)
+  * Add option to avoid creation of .bak files (Closes: #803115)
+
+  [ Ian Campbell ]
+  * Succeed but do nothing when run on an unknown machine which was booted via
+    EFI. Based on a patch from Newell Jensen. (Closes: #806171)
+  * Use /dev/mtdN when flashing, rather than needlessly going through the
+    mtdblock layer (which is problematic on some platforms/kernels).
+    (Closes: #794265)
+  * Keep a backup copy of any files written to either a filesystem mounted via
+    Boot-Device or directly to a flash device under /var/backups/flash-kernel.
+    This makes files which are not normally visible via the regular filesystem
+    available e.g. for convenient backing up (Closes: #736503)
+
+ -- Christian Perrier <bubulle@debian.org>  Mon, 30 Nov 2015 06:57:43 +0100
+
+flash-kernel (3.51) unstable; urgency=medium
+
+  [ Vagrant Cascadian ]
+  * Fix typo with distro_bootpart handling in u-boot generic bootscript.
+  * Fix syntax errors when testing for empty variables in uboot-generic,
+    cubox-i, and wandboard bootscripts. Thanks to Rick Thomas for the
+    report (Closes: #805856).
+  * Add a machine db entry for Kosagi Novena Dual/Quad.
+  * Add a machine db entry for Lamobo R1.
+
+ -- Christian Perrier <bubulle@debian.org>  Tue, 24 Nov 2015 12:27:57 +0100
+
+flash-kernel (3.50) unstable; urgency=medium
+
+  [ Ian Campbell ]
+  * Only remove directories which exist.
+
+  [ Karsten Merker ]
+  * Add a machine db entry for the Iomega Iconnect.
+
+ -- Christian Perrier <bubulle@debian.org>  Tue, 17 Nov 2015 07:11:13 +0100
+
+flash-kernel (3.49) unstable; urgency=medium
+
+  [ Vagrant Cascadian ]
+  * Consistently use "setenv" in boot scripts, as some u-boot variants do
+    not support using "=" for variable assignment.
+
+ -- Christian Perrier <bubulle@debian.org>  Thu, 12 Nov 2015 07:14:35 +0100
+
+flash-kernel (3.48) unstable; urgency=medium
+
+  [ Vagrant Cascadian ]
+  * Update beaglebone, sunxi and u-boot generic boot scripts to support
+    distro_bootpart variable added in u-boot mainline.
+  * Update wandboard and cubox-i boot scripts to improve distro_bootcmd
+    support.
 
   [ Ian Campbell ]
   * Avoid waiting for Ctrl-C if any debconf frontend is in use, not just
     non-interactive. (Closes: #791794)
 
- -- Cyril Brulebois <kibi@debian.org>  Sat, 05 Dec 2015 19:16:33 +0100
+ -- Christian Perrier <bubulle@debian.org>  Sat, 07 Nov 2015 09:42:29 +0100
 
-flash-kernel (3.35+deb8u1) stable; urgency=medium
+flash-kernel (3.47) unstable; urgency=medium
 
+  [ Roger Shimizu ]
+  Various machine db updates for Buffalo Linkstation systems (Closes: #802578):
+  * Re-order machine db entries for "Buffalo Linkstation" series
+    - move up entry: Buffalo Linkstation LS-XHL
+  * Add machine db entries for a few Buffalo Linkstation systems
+    newly getting DT supported since Linux 4.3:
+    - orion5x: LS-WTGL
+    - kirkwood: LS-WVL/VL
+    - kirkwood: LS-WXL/WSXL
+  * Update machine db entries for Buffalo Linkstation system converting
+    to DT since Linux 4.3:
+    - orion5x: LS-WSGL
+
+  [ Karsten Merker ]
+  * Add machine db entries for a number of sunxi-based systems:
+    - Cubietech Cubieboard4
+    - Ippo Q8H Quad Core Tablet (v1.2)
+    - Iteaduino Plus A10
+    - MSI Primo81 tablet
+    - Olimex A20-Olimex-SOM-EVB
+
+ -- Christian Perrier <bubulle@debian.org>  Tue, 27 Oct 2015 06:58:56 +0100
+
+flash-kernel (3.46) unstable; urgency=medium
+
+  [ Karsten Merker ]
+  * Add machine db entries for various sunxi-based systems which are
+    (at least partially) supported in linux-image-4.2.0:
+    - Allwinner A23 Evaluation Board
+    - Allwinner GA10H Quad Core Tablet (v1.1)
+    - Auxtek t004 A10s hdmi tv-stick
+    - ET Q8 Quad Core Tablet (v1.6)
+    - Gemei G9 Tablet
+    - Jesurun Q5
+    - LinkSprite pcDuino3 Nano
+    - Mele A1000G Quad top set box
+    - Mele I7 Quad top set box
+    - mk808c
+    - Orange Pi
+    - Orange Pi Mini
+    - Sinlinx SinA33
+    - Utoo P66
+    - Wexler TAB7200
+  * Change Vcs-Browser entry to use cgit instead of gitweb on alioth.
+  * Disable the use of modprobe and udevadm in the mtdblock() function
+    while running the testsuite.
+
+ -- Christian Perrier <bubulle@debian.org>  Mon, 14 Sep 2015 07:03:46 +0200
+
+flash-kernel (3.45) unstable; urgency=medium
+
+  [ Karsten Merker ]
+  * Add machine db entries for various sunxi-based systems which are
+    (at least partially) supported in linux-image-4.0.0-2:
+    - Allwinner A31 APP4 EVB1 Evaluation Board
+    - BA10 tvbox
+    - Chuwi V7 CW0825
+    - CSQ CS908 top set box
+    - HAOYU Electronics Marsboard A10
+    - HSG H702
+    - Hyundai A7HD
+    - I12 / Q5 / QT840A A20 tvbox
+    - Ippo Q8H Dual Core Tablet (v1.2)
+    - Ippo Q8H Dual Core Tablet (v5)
+    - Mele M3
+    - Mele M9 top set box
+    - Merrii A20 Hummingbird
+    - Merrii A31 Hummingbird
+    - Merrii A80 Optimus Board
+    - MK802
+    - MK802ii
+    - MK802-A10s
+    - R7 A10s hdmi tv-stick
+
+ -- Christian Perrier <bubulle@debian.org>  Fri, 24 Jul 2015 06:46:37 +0200
+
+flash-kernel (3.44) unstable; urgency=medium
+
+  [ Ian Campbell ]
+  * Add support for "Udoo i.MX6 Quad Board" using entry from Michael
+    Fladischer. Also add a similar entry for "Udoo i.MX6 Dual-lite Board" based
+    on that but with the appropriate dtb. (Closes: #789192)
+
+ -- Christian Perrier <bubulle@debian.org>  Thu, 09 Jul 2015 07:00:12 +0200
+
+flash-kernel (3.43) unstable; urgency=medium
+
+  [ Ian Campbell ]
   * Combine i.MX53 QSB and LOCO board entries, they are the same thing and the
     LOCO variant was missing DTB information. (Closes: #788782)
 
- -- Ian Campbell <ijc@debian.org>  Wed, 17 Jun 2015 08:22:22 +0100
+ -- Christian Perrier <bubulle@debian.org>  Tue, 16 Jun 2015 06:56:47 +0200
+
+flash-kernel (3.42) unstable; urgency=medium
+
+  * Only install bootscripts relevant to the arch.
+  * Use correct variable name in bootscr.sunxi (Closes: #788221)
+  * Avoid use of && and || for control flow in boot scripts, the precedence is
+    not as expected.
+  * Change Vcs-Browser entry from http to https.
+
+ -- Ian Campbell <ijc@debian.org>  Wed, 10 Jun 2015 22:19:28 +0100
+
+flash-kernel (3.41) unstable; urgency=medium
+
+  * Improvements to generic u-boot boot script, based on a patch from Vagrant
+    Cascadian (Closes: #783074):
+    - If ${console} is set then add "console=${console}" to the bootargs.
+    - Boot the kernel using the versioned filenames in preference to the
+      generic symlinks.
+    - Log which kernel (if known) and device we are booting from.
+    - Workaround lack of baudrate included with console on various iMX
+      system.
+  * Install dtbs into /boot/dtbs/$kvers. Based on a patch from Vagrant
+    Cascadian. Retain links at /boot/dtb and /boot/dtb-$kvers (Closes: #783073)
+  * Switch boot scripts using $kvers to boot a specific kernel (rather than via
+    the vmlinuz symlink) to prefer ${fk_kvers} if set in the environment,
+    allowing a rudimentary ability to select which kernel to boot.
+
+ -- Ian Campbell <ijc@debian.org>  Sun, 07 Jun 2015 12:29:42 +0100
+
+flash-kernel (3.40) unstable; urgency=medium
+
+  * Fix regression in bootscr.beaglebone (syntax error, woops).
+
+ -- Cyril Brulebois <kibi@debian.org>  Tue, 26 May 2015 04:20:44 +0200
+
+flash-kernel (3.39) unstable; urgency=medium
+
+  * Add support for distro_bootcmd when using u-boot >= 2015.04+dfsg1-1
+    by adjusting bootscr.beaglebone: use results from distro_bootcmd and
+    use previous settings as a fallback (Closes: #786367). Thanks,
+    Vagrant Cascadian!
+
+ -- Cyril Brulebois <kibi@debian.org>  Mon, 25 May 2015 11:51:38 +0200
+
+flash-kernel (3.38) unstable; urgency=medium
+
+  [ Updated translations ]
+  * Portuguese (Brazil) (pt_BR.po) by Adriano Rafael Gomes
+
+ -- Christian Perrier <bubulle@debian.org>  Mon, 18 May 2015 17:29:38 +0200
+
+flash-kernel (3.37) unstable; urgency=medium
+
+  * Upload changes from 3.30~exp.1..3.36~exp.1 to unstable.
+  * Improvements to support for PlatHome OpenBlocks AX3-4 board
+    (Closes: #783323):
+    - Allow armmp-lpae kernel flavour.
+    - Remove Boot-Device option since this platform can boot from /boot.
+  * Handle Boot-Kernel-Image even if none of Dtb-Append, Machine-Id or
+    U-Boot-Kernel-Address are specified. Patch from David Lechner.
+    (Closes: #783278)
+  * Log some debug if either the kernel or the initrd is missing. Intended to
+    help debug one aspect of #781742.
+
+ -- Ian Campbell <ijc@debian.org>  Fri, 08 May 2015 19:24:06 +0100
+
+flash-kernel (3.36) unstable; urgency=medium
+
+  [ Vagrant Cascadian ]
+  * Add entries for SolidRun HummingBoard DL/Solo and SolidRun
+    HummingBoard Dual/Quad. (Closes: #783769)
+
+  [ Christian Perrier ]
+  * Update standards to 3.9.6 (checked)
+  * No longer hardcode the path to /bin/true, which will no longer
+    trigger a lintian warning and doesn't seem to be needed
+    anyway
+
+ -- Christian Perrier <bubulle@debian.org>  Fri, 01 May 2015 09:02:39 +0200
+
+flash-kernel (3.36~exp.1) experimental; urgency=medium
+
+  * Team upload.
+  * Merge up changes from 3.35
+
+ -- Karsten Merker <merker@debian.org>  Tue, 07 Apr 2015 14:24:50 +0200
 
 flash-kernel (3.35) unstable; urgency=medium
 
@@ -41,6 +383,12 @@ flash-kernel (3.35) unstable; urgency=medium
 
  -- Karsten Merker <merker@debian.org>  Tue, 07 Apr 2015 00:19:59 +0200
 
+flash-kernel (3.35~exp.1) experimental; urgency=medium
+
+  * Merge up changes from 3.34
+
+ -- Ian Campbell <ijc@debian.org>  Thu, 26 Mar 2015 21:41:38 +0000
+
 flash-kernel (3.34) unstable; urgency=medium
 
   * Update u-boot-tools to Recommends. In practice it is needed on most systems
@@ -49,6 +397,12 @@ flash-kernel (3.34) unstable; urgency=medium
 
  -- Ian Campbell <ijc@debian.org>  Thu, 26 Mar 2015 21:37:16 +0000
 
+flash-kernel (3.34~exp.1) experimental; urgency=medium
+
+  * Merge up changes from 3.33
+
+ -- Ian Campbell <ijc@debian.org>  Thu, 05 Mar 2015 07:00:54 +0000
+
 flash-kernel (3.33) unstable; urgency=medium
 
   [ Karsten Merker ]
@@ -56,12 +410,31 @@ flash-kernel (3.33) unstable; urgency=medium
 
  -- Ian Campbell <ijc@debian.org>  Thu, 05 Mar 2015 06:56:34 +0000
 
+flash-kernel (3.33~exp.1) experimental; urgency=medium
+
+  * Merge up changes from 3.32.
+
+ -- Ian Campbell <ijc@debian.org>  Tue, 10 Feb 2015 07:27:30 +0000
+
 flash-kernel (3.32) unstable; urgency=medium
 
   [ Karsten Merker ]
   * Add a machine db entry for the Olimex A20-OLinuXino-LIME2.
 
  -- Christian Perrier <bubulle@debian.org>  Mon, 09 Feb 2015 07:00:27 +0100
+
+flash-kernel (3.31~exp.1) experimental; urgency=medium
+
+  * Merge up changes from 3.30.
+  * Add support for Nvidia Jetson TK1.
+  * Allow DTB-Id to be an absolute file name.
+    (Based on a patch from Uwe Kleine-Koenig, Closes: #767744)
+  * Search for DTB files in /etc/flash-kernel/dtbs before the kernel, allowing
+    local overrides.
+  * Install bootscripts under /etc/flash-kernel/dtbs and treat as conffiles,
+    allowing for local modifications.
+
+ -- Ian Campbell <ijc@debian.org>  Tue, 30 Dec 2014 15:35:59 +0000
 
 flash-kernel (3.30) unstable; urgency=medium
 
@@ -78,6 +451,17 @@ flash-kernel (3.30) unstable; urgency=medium
   * Add a machine db entry for the LinkSprite pcDuino3
 
  -- Ian Campbell <ijc@debian.org>  Tue, 30 Dec 2014 15:31:42 +0000
+
+flash-kernel (3.30~exp.1) experimental; urgency=medium
+
+  * Append a DTB to all platforms using the kirkwood flavour from v3.17-rc1
+    onwards since all board file support has been removed from the kernel.
+  * Autodetect correct DTB for kirkwood based QNAP devices.
+  * Upstate to standards version 3.9.6. No changes required.
+  * This is the same as 3.29~exp.1 which was uploaded to unstable and then
+    superseded.
+
+ -- Ian Campbell <ijc@debian.org>  Sat, 13 Dec 2014 11:25:20 +0000
 
 flash-kernel (3.29) unstable; urgency=medium
 

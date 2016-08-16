@@ -1,8 +1,8 @@
-# Copyright (C) 2006  Joey Hess  <joeyh@debian.org>
+# Copyright (C) 2006  Joey Hess
 # Copyright (C) 2006, 2007, 2008, 2009, 2010, 2011  Martin Michlmayr <tbm@cyrius.com>
 # Copyright (C) 2011  Loïc Minier <lool@dooz.org>
 # Copyright (C) 2011  Julian Andres Klode <jak@debian.org>
-# Copyright (C) 2013-2014  Ian Campbell <ijc@hellion.org.uk>
+# Copyright (C) 2013-2016  Ian Campbell <ijc@debian.org>
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -19,7 +19,7 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301,
 # USA.
 
-BOOTSCRIPTS_DIR="${FK_CHECKOUT:-$FK_DIR}/bootscript"
+BOOTSCRIPTS_DIR="${FK_CHECKOUT:-/etc/flash-kernel}/bootscript"
 FK_ETC_MACHINE="${FK_ETC_MACHINE:-/etc/flash-kernel/machine}"
 PROC_CPUINFO="${FK_PROC_CPUINFO:-/proc/cpuinfo}"
 PROC_DTMODEL="${FK_PROC_DRMODEL:-/proc/device-tree/model}"
@@ -212,6 +212,39 @@ get_machine_field() {
 	}
 }
 
+get_dtb_name() {
+	local field="$(get_machine_field "$machine" "DTB-Id")" || :
+	case "$field" in
+	!*)
+		local dir
+		local dtb_script
+		dtb_script_name=${field#!}
+		for dir in /etc/flash-kernel/dtb-probe \
+		           /usr/share/flash-kernel/dtb-probe ; do
+			if [ -e "$dir/$dtb_script_name" ]; then
+				dtb_script="$dir/$dtb_script_name"
+				break
+			fi
+		done
+
+		if [ "x$dtb_script" = "x" ]; then
+			error "dtb-probe $dtb_script_name not found"
+		fi
+
+		dtb_name=$($dtb_script)
+		if [ $? -ne 0 ] || [ "x$dtb_name" = "x" ]; then
+			error "dtb-probe $dtb_script failed"
+		fi
+		;;
+	*)
+		dtb_name="$field"
+		;;
+	esac
+	if [ -n "$dtb_name" ] ; then
+		echo "DTB: $dtb_name" >&2
+	fi
+}
+
 machine_uses_flash() {
 	local machine="$1"
 
@@ -273,6 +306,8 @@ append_dtb() {
 	local dtb="$2"
 	local output="$3"
 
+	echo "flash-kernel: appending $dtb to kernel" >&2
+
 	{
 		cat "$kernel"
 		cat "$dtb"
@@ -283,12 +318,21 @@ write_mtd() {
 	local input_file="$1"
 	local output_mtd="$2"
 	local base_mtd=$(basename $output_mtd)
+	local mtd_backup_dir=$(get_mtd_backup_dir)
 	local tmpfile
 
 	if [ "x$input_file" = "x-" ] ; then
 		tmpfile=$(mktemp -t "$self.$base_mtd.XXXXXX") || error "Failed"
 		cat > $tmpfile
 		input_file="$tmpfile"
+	fi
+
+	# Keep a copy in a convenient place for backups etc
+	if [ -n "${mtd_backup_dir}" ] ; then
+		local backup="${mtd_backup_dir}/${base_mtd}"
+		#echo "Saving new $output_mtd in ${backup}."
+		mkdir -p "${mtd_backup_dir}"
+		cp "$input_file" "${backup}"
 	fi
 
 	# Can't really flashcp to /dev/mtd<N> when testing
@@ -327,7 +371,7 @@ flash_kernel() {
 			kreqsize=$(($kreqsize + 8))
 		fi
 	        check_mtd_size "$mtd_kernel" $kreqsize $kmtdsize kernel
-		use=" ($kreqsize/$kmtdsize bytes)"
+		use=" (using $kreqsize/$kmtdsize bytes)"
 	fi
 
 	printf "Flashing kernel$use... " >&2
@@ -343,7 +387,7 @@ flash_initrd() {
 	local use
 
 	if [ -n "$imtdsize" ]; then
-		use=" ($ireqsize/$imtdsize bytes)"
+		use=" (using $ireqsize/$imtdsize bytes)"
 	fi
 
 	printf "Flashing initramfs$use... " >&2
@@ -359,6 +403,10 @@ flash_initrd() {
 get_kernel_cmdline() {
         . /etc/default/flash-kernel
 	echo "$LINUX_KERNEL_CMDLINE"
+}
+get_kernel_cmdline_defaults() {
+        . /etc/default/flash-kernel
+	echo "$LINUX_KERNEL_CMDLINE_DEFAULTS"
 }
 
 mkimage_kernel() {
@@ -400,6 +448,7 @@ mkimage_script() {
 	printf "Generating boot script u-boot image... " >&2
 	sed -e "s/@@KERNEL_VERSION@@/$kvers/g" \
             -e "s!@@LINUX_KERNEL_CMDLINE@@!$(get_kernel_cmdline)!g" \
+            -e "s!@@LINUX_KERNEL_CMDLINE_DEFAULTS@@!$(get_kernel_cmdline_defaults)!g" \
             -e "/@@UBOOT_ENV_EXTRA@@/{
                   s/@@UBOOT_ENV_EXTRA@@//g
                   r $ubootenv
@@ -422,13 +471,45 @@ mkimage_multi() {
 	echo "done." >&2
 }
 
+# Return a nonempty string *unless* NO_CREATE_DOT_BAK_FILES is set.
+get_dot_bak_preference() {
+	. /etc/default/flash-kernel
+	case $(echo "$NO_CREATE_DOT_BAK_FILES" | tr '[:upper:]' '[:lower:]') in
+	    true|yes|1) ;;
+	    *) echo yes ;;
+	esac
+}
+
+# Return a nonempty string *unless* MTD_BACKUP_DIR is "none".
+get_mtd_backup_dir() {
+	. /etc/default/flash-kernel
+	case "${MTD_BACKUP_DIR:=/var/backups/flash-kernel}" in
+	    none) echo "";;
+	    *) echo "${MTD_BACKUP_DIR}";;
+	esac
+}
+
 backup_and_install() {
 	local source="$1"
 	local dest="$2"
-
+	local do_dot_bak=$(get_dot_bak_preference)
+	local mtd_backup_dir=$(get_mtd_backup_dir)
 	if [ -e "$dest" ]; then
-		echo "Taking backup of $(basename "$dest")." >&2
-		mv "$dest" "$dest.bak"
+		if [ -n "$do_dot_bak" ]; then
+			echo "Taking backup of $(basename "$dest")." >&2
+			mv "$dest" "$dest.bak"
+		else
+			echo "Skipping backup of $(basename "$dest")." >&2
+		fi
+	fi
+	# If we are installing to a filesystem which is not normally mounted
+	# then take a second copy in /var/backups, where they can e.g. be
+	# backed up.
+	if [ -n "$boot_mnt_dir" ] && [ -n "$mtd_backup_dir" ] ; then
+		local bak="$mtd_backup_dir/"$(basename "$dest")
+		#echo "Saving $boot_device:"$(basename "$source")" in $bak"
+		mkdir -p "$mtd_backup_dir"
+		cp "$source" "$bak"
 	fi
 	echo "Installing new $(basename "$dest")." >&2
 	mv "$source" "$dest"
@@ -443,7 +524,7 @@ sercomm_header() {
 }
 
 nslu2_swap() {
-	if [ "$little_endian" ]; then
+	if [ "$little_endian" -eq 1 ]; then
 		devio "<<$1" "xp $,4"
 	else
 		cat "$1"
@@ -471,23 +552,68 @@ android_flash() {
 	echo "done." >&2
 }
 
+find_dtb_file() {
+	case "$dtb_name" in
+	/*)
+		echo "$dtb_name"
+		;;
+	*)
+		if [ -e "/etc/flash-kernel/dtbs/$dtb_name" ] ; then
+			echo "/etc/flash-kernel/dtbs/$dtb_name"
+		else
+			echo "/usr/lib/linux-image-$kvers/$dtb_name"
+		fi
+		;;
+	esac
+}
+
 handle_dtb() {
-	local dtb_id="$(get_machine_field "$machine" "DTB-Id")" || :
-	if [ "x$dtb_id" = "x" ]; then
+	if [ "x$dtb_name" = "x" ]; then
 		return
 	fi
 
-	local dtb="/usr/lib/linux-image-$kvers/$dtb_id"
+	local dtb=$(find_dtb_file)
 	if [ "x$FK_KERNEL_HOOK_SCRIPT" = "xpostrm.d" ] ; then
+		rm -f "/boot/dtbs/$kvers/$dtb_name"
+
+		# This was the old name we installed under. We
+		# currently include it as an alternative symlink.
 		rm -f "/boot/dtb-$kvers"
+
+		if [ -L /boot/dtb ] ; then
+			# Remove if it points to the current kernel
+			# version, both old (dtb-$kvers) and new
+			# (dtbs/...) names
+			case $(readlink /boot/dtb) in
+				"dtb-$kvers") rm -f /boot/dtb ;;
+				"dtbs/$kvers/$dtb_name") rm -f /boot/dtb ;;
+			esac
+		fi
+
+		if [ -d /boot/dtbs/$kvers ] ; then
+			rmdir --ignore-fail-on-non-empty /boot/dtbs/$kvers
+		fi
+		if [ -d /boot/dtbs ] ; then
+			rmdir --ignore-fail-on-non-empty /boot/dtbs
+		fi
 	else
 		if [ -e $dtb ]; then
-			echo "Installing $dtb_id into /boot/dtb-$kvers" >&2
-			cp "$dtb" "/boot/dtb-$kvers.new"
-			backup_and_install "/boot/dtb-$kvers.new" "/boot/dtb-$kvers"
-			ln -nfs "dtb-$kvers" "/boot/dtb"
-		else
-			echo "$dtb not found" >&2
+			echo "Installing $dtb_name into /boot/dtbs/$kvers/$dtb_name" >&2
+			mkdir -p /boot/dtbs/$kvers/
+			cp "$dtb" "/boot/dtbs/$kvers/$dtb_name.new"
+			backup_and_install \
+				"/boot/dtbs/$kvers/$dtb_name.new" \
+				"/boot/dtbs/$kvers/$dtb_name"
+
+			# Historically we installed the dtb as
+			# dtb-$kvers, keep it around as an alternative
+			# for now. Useful for platforms which do not
+			# set ${fdtfile}
+			ln -nfs "dtbs/$kvers/$dtb_name" "/boot/dtb-$kvers"
+
+			# This can be used along with the unversioned
+			# vmlinuz+initrd.gz e.g. as a fallback option
+			ln -nfs "dtbs/$kvers/$dtb_name" "/boot/dtb"
 		fi
 	fi
 }
@@ -496,7 +622,7 @@ main() {
 force="no"
 if [ "x$1" = "x--force" ]; then
 	force="yes"
-        shift
+	shift
 fi
 if [ "x$1" = "x--machine" ]; then
 	machine="$2"
@@ -520,16 +646,14 @@ fi
 
 kvers="$1"
 
+get_dtb_name
+
 # Install/remove any DTB from postinst, regardless of version
 if [ -n "$kvers" ] ; then
 	handle_dtb
 fi
 
 latest_version=$(linux-version list | linux-version sort | tail -1)
-if [ -n "$kvers" ] && [ "x$force" != "xyes" ] && [ "$kvers" != "$latest_version" ] && [ "$FK_KERNEL_HOOK_SCRIPT" = "postinst.d" ]; then
-	echo "Ignoring old or unknown version $kvers (latest is $latest_version)" >&2
-	exit 0
-fi
 
 if [ -n "$kvers" ] && [ "$FK_KERNEL_HOOK_SCRIPT" = "postrm.d" ]; then
 	echo "flash-kernel: Kernel ${kvers} has been removed." >&2
@@ -552,6 +676,13 @@ if [ "$kvers" != "$latest_version" ] && [ "x$force" = "xyes" ]; then
 	echo "flash-kernel: forcing install of ${kvers} instead of ${latest_version}." >&2
 	echo "flash-kernel: WARNING: Installing any new kernel package might override this." >&2
 else
+	if [ -n "$kvers" ] && [ "$kvers" != "$latest_version" ]; then
+		echo "Ignoring old or unknown version $kvers (latest is $latest_version)" >&2
+		if [ "$FK_KERNEL_HOOK_SCRIPT" = "postinst.d" ]; then
+			exit 0
+		fi
+		echo "Use --force if you want version $kvers." >&2
+	fi
 	kvers="$latest_version"
 	# Make sure we install the DTB for $latest_version
 	handle_dtb
@@ -579,7 +710,18 @@ desc="kernel $kvers"
 idesc="ramdisk $kvers"
 
 if [ ! -e $kfile ] || [ ! -e $ifile ]; then
-	error "Can't find $kfile or $ifile"
+	# installation-report #781742 included:
+	#     Can't find /boot/vmlinuz-[...] or /boot/initrd.img-[...]
+	#
+	# It's unclear how this can have happened or what state the
+	# system was in, so log some additional information in the
+	# hopes of catching it in the act next time.
+	(
+		set -x
+		ls -l $kfile*
+		ls -l $ifile*
+	) >> /tmp/flash-kernel-no-kernel-error.log 2>&1
+	error "Can't find $kfile or $ifile (see /tmp/flash-kernel-no-kernel-error.log)"
 fi
 kfilesize=$(stat -c '%s' "$kfile")
 ifilesize=$(stat -c '%s' "$ifile")
@@ -589,6 +731,11 @@ if [ -L "$kfile" ]; then
 fi
 
 if ! check_supported "$machine"; then
+	# do nothing if an unsupported platform is booted from EFI
+	if [ -d /sys/firmware/efi ]; then
+		echo "Unsupported platform on EFI system, doing nothing."
+		exit 0
+	fi
 	error "Unsupported platform."
 fi
 
@@ -598,7 +745,7 @@ if kflavors="$(get_machine_field "$machine" "Kernel-Flavors")"; then
 		kfile_suffix=$(get_kfile_suffix "$kfile" "$kfile_suffix")
 
 		if check_kflavors "$kfile_suffix" $kflavors; then
-			break;
+			break
 		fi
 	done
 fi
@@ -614,7 +761,6 @@ machine_id="$(get_machine_field "$machine" "Machine-Id")" || :
 method="$(get_machine_field "$machine" "Method")" || method="generic"
 mtd_kernel="$(get_machine_field "$machine" "Mtd-Kernel")" || :
 mtd_initrd="$(get_machine_field "$machine" "Mtd-Initrd")" || :
-dtb_name="$(get_machine_field "$machine" "DTB-Id")" || :
 dtb_append="$(get_machine_field "$machine" "DTB-Append")" || :
 dtb_append_from="$(get_machine_field "$machine" "DTB-Append-From")" || :
 ukaddr="$(get_machine_field "$machine" "U-Boot-Kernel-Address")" || :
@@ -706,7 +852,7 @@ case "$method" in
 		kernel="$kfile"
 		initrd="$ifile"
 		if [ "$dtb_append" = "yes" ]; then
-			dtb="/usr/lib/linux-image-$kvers/$dtb_name"
+			dtb=$(find_dtb_file)
 			if [ ! -f "$dtb" ]; then
 				error "Couldn't find $dtb"
 			fi
@@ -743,13 +889,11 @@ case "$method" in
 		if [ -n "$boot_kernel_path" ]; then
 			boot_kernel_path="$boot_mnt_dir/$boot_kernel_path"
 			# don't mv the original kernel
-			if [ "$kernel" != "$kfile" ]; then
-				backup_and_install "$kernel" \
-					"$boot_kernel_path"
-			else
-				# TODO add support for kernel symlink
-				:
+			if [ "$kernel" = "$kfile" ]; then
+				cp "$kernel" "$tmpdir/kernel"
+				kernel="$tmpdir/kernel"
 			fi
+			backup_and_install "$kernel" "$boot_kernel_path"
 		elif [ -n "$kmtd" ]; then
 			flash_kernel "$tmpdir/uImage" "$kmtd" ""
 			rm -f "$tmpdir/uImage"
@@ -765,13 +909,11 @@ case "$method" in
 		if [ -n "$boot_initrd_path" ]; then
 			boot_initrd_path="$boot_mnt_dir/$boot_initrd_path"
 			# don't mv the original initrd
-			if [ "$initrd" != "$ifile" ]; then
-				backup_and_install "$initrd" \
-					"$boot_initrd_path"
-			else
-				# TODO add support for initrd symlink
-				:
+			if [ "$initrd" = "$ifile" ]; then
+				cp "$initrd" "$tmpdir/initrd"
+				initrd="$tmpdir/initrd"
 			fi
+			backup_and_install "$initrd" "$boot_initrd_path"
 		elif [ -n "$imtd" ]; then
 			ipad=0
 			# padding isn't needed for U-Boot images
@@ -791,7 +933,7 @@ case "$method" in
 		fi
 		if [ -n "$boot_dtb_path" ]; then
 			boot_dtb_path="$boot_mnt_dir/$boot_dtb_path"
-			boot_dtb="/usr/lib/linux-image-$kvers/$dtb_name"
+			boot_dtb=$(find_dtb_file)
 			if [ ! -f "$boot_dtb" ]; then
 				error "Couldn't find $boot_dtb"
 			fi
