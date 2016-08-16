@@ -1,0 +1,629 @@
+# somewhat RFC2822 based, but case sensitive, not tolerant to spaces etc.
+
+Machine: APM X-Gene Mustang board
+U-Boot-Kernel-Address: 0x80000
+U-Boot-Initrd-Address: 0x0
+U-Boot-Script-Address: 0x4004000000
+U-Boot-Script-Name: bootscr.xgene-mustang
+Boot-Kernel-Path: /boot/uImage
+Boot-Initrd-Path: /boot/uInitrd
+Boot-Script-Path: /boot/boot.scr
+Required-Packages: u-boot-tools
+DTB-Id: apm-mustang.dtb
+
+Machine: Buffalo Linkstation LiveV3 (LS-CHL)
+Kernel-Flavors: orion5x
+Machine-Id: 2913
+U-Boot-Kernel-Address: 0x00008000
+U-Boot-Initrd-Address: 0x0
+Boot-Kernel-Path: /boot/uImage.buffalo
+Boot-Initrd-Path: /boot/initrd.buffalo
+Required-Packages: u-boot-tools
+Bootloader-Sets-Incorrect-Root: yes
+
+Machine: Buffalo Linkstation LS-CHLv2
+Kernel-Flavors: kirkwood
+DTB-Id: kirkwood-lschlv2.dtb
+DTB-Append: yes
+U-Boot-Kernel-Address: 0x00008000
+U-Boot-Initrd-Address: 0x0
+Boot-Kernel-Path: /boot/uImage.buffalo
+Boot-Initrd-Path: /boot/initrd.buffalo
+Boot-DTB-Path: /boot/dtb
+Required-Packages: u-boot-tools
+Bootloader-Sets-Incorrect-Root: yes
+
+Machine: Buffalo Linkstation Mini
+Kernel-Flavors: orion5x
+Machine-Id: 1858
+U-Boot-Kernel-Address: 0x00008000
+U-Boot-Initrd-Address: 0x0
+Boot-Kernel-Path: /boot/uImage.buffalo
+Boot-Initrd-Path: /boot/initrd.buffalo
+Required-Packages: u-boot-tools
+Bootloader-Sets-Incorrect-Root: yes
+
+Machine: Buffalo Linkstation Pro/Live
+Kernel-Flavors: orion5x
+Machine-Id: 1585
+U-Boot-Kernel-Address: 0x00008000
+U-Boot-Initrd-Address: 0x0
+Boot-Kernel-Path: /boot/uImage.buffalo
+Boot-Initrd-Path: /boot/initrd.buffalo
+Required-Packages: u-boot-tools
+Bootloader-Sets-Incorrect-Root: yes
+
+Machine: Buffalo Linkstation LS-XHL
+Kernel-Flavors: kirkwood
+DTB-Id: kirkwood-lsxhl.dtb
+DTB-Append: yes
+U-Boot-Kernel-Address: 0x00008000
+U-Boot-Initrd-Address: 0x0
+Boot-Kernel-Path: /boot/uImage.buffalo
+Boot-Initrd-Path: /boot/initrd.buffalo
+Boot-DTB-Path: /boot/dtb
+Required-Packages: u-boot-tools
+Bootloader-Sets-Incorrect-Root: yes
+
+Machine: Buffalo/Revogear Kurobox Pro
+Kernel-Flavors: orion5x
+Machine-Id: 1509
+U-Boot-Kernel-Address: 0x00008000
+U-Boot-Initrd-Address: 0x0
+Boot-Kernel-Path: /boot/uImage.buffalo
+Boot-Initrd-Path: /boot/initrd.buffalo
+Required-Packages: u-boot-tools
+Bootloader-Sets-Incorrect-Root: yes
+
+Machine: Calxeda Highbank
+Kernel-Flavors: armmp
+Boot-Script-Path: /boot/boot.scr
+U-Boot-Script-Name: bootscr.highbank
+Required-Packages: u-boot-tools
+
+Machine: Cubietech Cubieboard
+Kernel-Flavors: armmp
+Boot-Script-Path: /boot/boot.scr
+DTB-Id: sun4i-a10-cubieboard.dtb
+U-Boot-Script-Name: bootscr.sunxi
+Required-Packages: u-boot-tools
+
+Machine: Cubietech Cubieboard2
+Kernel-Flavors: armmp armmp-lpae
+Boot-Script-Path: /boot/boot.scr
+DTB-Id: sun7i-a20-cubieboard2.dtb
+U-Boot-Script-Name: bootscr.sunxi
+Required-Packages: u-boot-tools
+
+Machine: Cubietech Cubietruck
+Kernel-Flavors: armmp armmp-lpae
+Boot-Script-Path: /boot/boot.scr
+DTB-Id: sun7i-a20-cubietruck.dtb
+U-Boot-Script-Name: bootscr.sunxi
+Required-Packages: u-boot-tools
+
+Machine: SolidRun Cubox-i Dual/Quad
+Kernel-Flavors: armmp
+DTB-Id: imx6q-cubox-i.dtb
+Boot-Script-Path: /boot/boot.scr
+U-Boot-Script-Name: bootscr.cubox-i
+Required-Packages: u-boot-tools
+
+Machine: D-Link DNS-320 NAS (Rev A1)
+Kernel-Flavors: kirkwood
+DTB-Id: kirkwood-dns320.dtb
+DTB-Append-From: 3.12
+Mtd-Kernel: uImage
+Mtd-Initrd: ramdisk
+U-Boot-Kernel-Address: 0x00008000
+U-Boot-Initrd-Address: 0x00e00000
+Required-Packages: u-boot-tools
+Bootloader-Sets-Incorrect-Root: yes
+
+Machine: D-Link DNS-323
+Kernel-Flavors: orion5x
+Machine-Id: 1542
+Mtd-Kernel: Linux Kernel
+Mtd-Initrd: File System
+U-Boot-Kernel-Address: 0x00008000
+U-Boot-Initrd-Address: 0x00800000
+Required-Packages: u-boot-tools
+Bootloader-Sets-Incorrect-Root: yes
+
+Machine: Freescale i.MX53 Quick Start Board
+Machine: Freescale MX53 LOCO Board
+Kernel-Flavors: armmp mx5
+DTB-Id: imx53-qsb.dtb
+DTB-Append-From: 3.12
+Boot-DTB-Path: /boot/dtb
+U-Boot-Kernel-Address: 0x70008000
+U-Boot-Initrd-Address: 0x0
+Boot-Kernel-Path: /boot/uImage
+Boot-Initrd-Path: /boot/uInitrd
+Required-Packages: u-boot-tools
+Bootloader-Sets-Incorrect-Root: no
+
+Machine: Genesi Efika Smartbook
+Kernel-Flavors: armmp mx5
+U-Boot-Kernel-Address: 0x90008000
+U-Boot-Initrd-Address: 0x0
+U-Boot-Script-Address: 0x0
+U-Boot-Script-Name: bootscr.mx5
+Boot-Kernel-Path: /boot/uImage
+Boot-Initrd-Path: /boot/uInitrd
+Boot-Script-Path: /boot/boot.scr
+Required-Packages: u-boot-tools
+Bootloader-Sets-Incorrect-Root: yes
+
+Machine: Genesi EfikaMX nettop
+Kernel-Flavors: armmp mx5
+U-Boot-Kernel-Address: 0x90008000
+U-Boot-Initrd-Address: 0x0
+U-Boot-Script-Address: 0x0
+U-Boot-Script-Name: bootscr.mx5
+Boot-Kernel-Path: /boot/uImage
+Boot-Initrd-Path: /boot/uInitrd
+Boot-Script-Path: /boot/boot.scr
+Required-Packages: u-boot-tools
+Bootloader-Sets-Incorrect-Root: yes
+
+Machine: GLAN Tank
+Method: symlink
+Kernel-Flavors: iop32x
+Machine-Id: 1100
+Bootloader-Sets-Incorrect-Root: yes
+
+Machine: GTA02
+Method: multi
+Kernel-Flavors: s3c24xx
+U-Boot-Multi-Address: 0x30008000
+Boot-Multi-Path: /boot/uImage.bin
+Required-Packages: u-boot-tools
+Bootloader-Sets-Incorrect-Root: yes
+
+Machine: HP Media Vault mv2120
+Kernel-Flavors: orion5x
+Machine-Id: 1693
+U-Boot-Multi-Address: 0x01600000
+Boot-Multi-Path: /boot/uImage
+# mv2120-utils includes some initramfs-tools scripts that are nice to have but
+# which are not essential
+Optional-Packages: mv2120-utils
+Required-Packages: u-boot-tools
+Bootloader-Sets-Incorrect-Root: yes
+
+Machine: HP t5325 Thin Client
+Kernel-Flavors: kirkwood
+Machine-Id: 2846
+U-Boot-Multi-Address: 0x01600000
+Boot-Multi-Path: /boot/uImage
+Required-Packages: u-boot-tools
+Bootloader-Sets-Incorrect-Root: yes
+
+Machine: Insignal Arndale evaluation board based on EXYNOS5250
+Kernel-Flavors: armmp armmp-lpae
+DTB-Id: exynos5250-arndale.dtb
+Boot-Script-Path: /boot/boot.scr
+U-Boot-Script-Name: bootscr.uboot-generic
+Required-Packages: u-boot-tools
+
+Machine: INet-97F Rev 02
+Kernel-Flavors: armmp
+Boot-Script-Path: /boot/boot.scr
+DTB-Id: sun4i-a10-inet97fv2.dtb
+U-Boot-Script-Name: bootscr.sunxi
+Required-Packages: u-boot-tools
+
+Machine: LaCie 2Big Network v2
+Kernel-Flavors: kirkwood
+U-Boot-Kernel-Address: 0x00008000
+U-Boot-Initrd-Address: 0x0
+Boot-Kernel-Path: /boot/uImage
+Boot-Initrd-Path: /boot/uInitrd
+Required-Packages: u-boot-tools
+
+Machine: LaCie 5Big Network v2
+Kernel-Flavors: kirkwood
+U-Boot-Kernel-Address: 0x00008000
+U-Boot-Initrd-Address: 0x0
+Boot-Kernel-Path: /boot/uImage
+Boot-Initrd-Path: /boot/uInitrd
+Required-Packages: u-boot-tools
+
+Machine: LaCie Internet Space v2
+Kernel-Flavors: kirkwood
+DTB-Id: kirkwood-is2.dtb
+DTB-Append-From: 3.12
+U-Boot-Kernel-Address: 0x00008000
+U-Boot-Initrd-Address: 0x0
+Boot-Kernel-Path: /boot/uImage
+Boot-Initrd-Path: /boot/uInitrd
+Boot-DTB-Path: /boot/dtb
+Required-Packages: u-boot-tools
+
+Machine: LaCie Network Space v2
+Kernel-Flavors: kirkwood
+DTB-Id: kirkwood-ns2.dtb
+DTB-Append-From: 3.12
+U-Boot-Kernel-Address: 0x00008000
+U-Boot-Initrd-Address: 0x0
+Boot-Kernel-Path: /boot/uImage
+Boot-Initrd-Path: /boot/uInitrd
+Boot-DTB-Path: /boot/dtb
+Required-Packages: u-boot-tools
+
+Machine: LaCie Network Space Max v2
+Kernel-Flavors: kirkwood
+DTB-Id: kirkwood-ns2max.dtb
+DTB-Append-From: 3.12
+U-Boot-Kernel-Address: 0x00008000
+U-Boot-Initrd-Address: 0x0
+Boot-Kernel-Path: /boot/uImage
+Boot-Initrd-Path: /boot/uInitrd
+Boot-DTB-Path: /boot/dtb
+Required-Packages: u-boot-tools
+
+Machine: LaCie d2 Network v2
+Kernel-Flavors: kirkwood
+U-Boot-Kernel-Address: 0x00008000
+U-Boot-Initrd-Address: 0x0
+Boot-Kernel-Path: /boot/uImage
+Boot-Initrd-Path: /boot/uInitrd
+Required-Packages: u-boot-tools
+
+# Really: Intel SS4000-e and compatibles
+Machine: Lanner EM7210
+Method: redboot
+Kernel-Flavors: iop32x
+Machine-Id: 1212
+Mtd-Kernel: zImage
+Mtd-Initrd: ramdisk.gz
+Bootloader-Sets-Incorrect-Root: yes
+
+Machine: LeMaker Banana Pi
+Kernel-Flavors: armmp armmp-lpae
+Boot-Script-Path: /boot/boot.scr
+DTB-Id: sun7i-a20-bananapi.dtb
+U-Boot-Script-Name: bootscr.sunxi
+Required-Packages: u-boot-tools
+
+Machine: LeMaker Banana Pro
+Kernel-Flavors: armmp armmp-lpae
+Boot-Script-Path: /boot/boot.scr
+DTB-Id: sun7i-a20-bananapro.dtb
+U-Boot-Script-Name: bootscr.sunxi
+Required-Packages: u-boot-tools
+
+Machine: LinkSprite pcDuino
+Kernel-Flavors: armmp
+Boot-Script-Path: /boot/boot.scr
+DTB-Id: sun4i-a10-pcduino.dtb
+U-Boot-Script-Name: bootscr.sunxi
+Required-Packages: u-boot-tools
+
+Machine: LinkSprite pcDuino3
+Kernel-Flavors: armmp armmp-lpae
+Boot-Script-Path: /boot/boot.scr
+DTB-Id: sun7i-a20-pcduino3.dtb
+U-Boot-Script-Name: bootscr.sunxi
+Required-Packages: u-boot-tools
+
+Machine: Linksys NSLU2
+Method: slug
+Kernel-Flavors: ixp4xx
+Mtd-Kernel: Kernel
+Mtd-Initrd: Ramdisk
+# firmware can be provided in other ways and is not always needed
+Optional-Packages: ixp4xx-firmware
+# nslu2-utils will call update-initramfs -u to include the firmware and to run
+# the hook from flash-kernel
+Required-Packages: apex-nslu2 nslu2-utils
+
+Machine: Marvell DB-78x00-BP Development Board
+U-Boot-Kernel-Address: 0x8000
+U-Boot-Initrd-Address: 0x0
+Boot-Kernel-Path: /boot/uImage
+Boot-Initrd-Path: /boot/uInitrd
+Required-Packages: u-boot-tools
+
+# Marvell dev board has different names depending on how it's booted,
+# via DTB or older ATAGS
+Machine: Marvell Armada XP GP Board
+Machine: Marvell Armada XP Development Board DB-MV784MP-GP
+Kernel-Flavors: armmp lpae armmp-lpae
+DTB-Id: armada-xp-gp.dtb
+DTB-Append: yes
+U-Boot-Kernel-Address: 0x00008000
+U-Boot-Initrd-Address: 0x0
+Boot-Kernel-Path: /boot/uImage
+Boot-Initrd-Path: /boot/uInitrd
+Boot-DTB-Path: /boot/dtb
+Required-Packages: u-boot-tools
+
+Machine: Globalscale Technologies Dreamplug
+Kernel-Flavors: kirkwood
+DTB-Id: kirkwood-dreamplug.dtb
+DTB-Append: yes
+U-Boot-Kernel-Address: 0x00008000
+U-Boot-Initrd-Address: 0x0
+Boot-Device: /dev/sda1
+Boot-Kernel-Path: uImage
+Boot-Initrd-Path: uInitrd
+Boot-DTB-Path: dtb
+Required-Packages: u-boot-tools
+
+Machine: Globalscale Mirabox
+Kernel-Flavors: armmp
+DTB-Id: armada-370-mirabox.dtb
+DTB-Append: yes
+U-Boot-Kernel-Address: 0x00008000
+U-Boot-Initrd-Address: 0x0
+Boot-Device: /dev/sdb1
+Boot-Kernel-Path: uImage
+Boot-Initrd-Path: uInitrd
+Boot-DTB-Path: dtb
+Required-Packages: u-boot-tools
+
+Machine: Marvell GuruPlug Reference Board
+Machine: Globalscale Technologies Guruplug Server Plus
+Kernel-Flavors: kirkwood
+DTB-Id: kirkwood-guruplug-server-plus.dtb
+DTB-Append-From: 3.12
+U-Boot-Kernel-Address: 0x00008000
+U-Boot-Initrd-Address: 0x0
+Boot-Kernel-Path: /boot/uImage
+Boot-Initrd-Path: /boot/uInitrd
+Boot-DTB-Path: /boot/dtb
+Required-Packages: u-boot-tools
+
+Machine: Marvell OpenRD Base Board
+Kernel-Flavors: kirkwood
+U-Boot-Kernel-Address: 0x00008000
+U-Boot-Initrd-Address: 0x0
+Boot-Kernel-Path: /boot/uImage
+Boot-Initrd-Path: /boot/uInitrd
+Required-Packages: u-boot-tools
+
+Machine: Marvell OpenRD Client Board
+Kernel-Flavors: kirkwood
+U-Boot-Kernel-Address: 0x00008000
+U-Boot-Initrd-Address: 0x0
+Boot-Kernel-Path: /boot/uImage
+Boot-Initrd-Path: /boot/uInitrd
+Required-Packages: u-boot-tools
+
+Machine: Marvell OpenRD Ultimate Board
+Kernel-Flavors: kirkwood
+U-Boot-Kernel-Address: 0x00008000
+U-Boot-Initrd-Address: 0x0
+Boot-Kernel-Path: /boot/uImage
+Boot-Initrd-Path: /boot/uInitrd
+Required-Packages: u-boot-tools
+
+Machine: Marvell SheevaPlug Reference Board
+Machine: Globalscale Technologies SheevaPlug
+Kernel-Flavors: kirkwood
+DTB-Id: kirkwood-sheevaplug.dtb
+DTB-Append-From: 3.12
+U-Boot-Kernel-Address: 0x00008000
+U-Boot-Initrd-Address: 0x0
+Boot-Kernel-Path: /boot/uImage
+Boot-Initrd-Path: /boot/uInitrd
+Boot-DTB-Path: /boot/dtb
+Required-Packages: u-boot-tools
+
+Machine: Marvell eSATA SheevaPlug Reference Board
+Machine: Globalscale Technologies eSATA SheevaPlug
+Kernel-Flavors: kirkwood
+DTB-Id: kirkwood-sheevaplug-esata.dtb
+DTB-Append-From: 3.12
+U-Boot-Kernel-Address: 0x00008000
+U-Boot-Initrd-Address: 0x0
+Boot-Kernel-Path: /boot/uImage
+Boot-Initrd-Path: /boot/uInitrd
+Boot-DTB-Path: /boot/dtb
+Required-Packages: u-boot-tools
+
+Machine: Mele A1000
+Kernel-Flavors: armmp
+Boot-Script-Path: /boot/boot.scr
+DTB-Id: sun4i-a10-a1000.dtb
+U-Boot-Script-Name: bootscr.sunxi
+Required-Packages: u-boot-tools
+
+Machine: Miniand Hackberry
+Kernel-Flavors: armmp
+Boot-Script-Path: /boot/boot.scr
+DTB-Id: sun4i-a10-hackberry.dtb
+U-Boot-Script-Name: bootscr.sunxi
+Required-Packages: u-boot-tools
+
+Machine: Olimex A10-OLinuXino-LIME
+Kernel-Flavors: armmp
+Boot-Script-Path: /boot/boot.scr
+DTB-Id: sun4i-a10-olinuxino-lime.dtb
+U-Boot-Script-Name: bootscr.sunxi
+Required-Packages: u-boot-tools
+
+Machine: Olimex A10s-Olinuxino Micro
+Kernel-Flavors: armmp
+Boot-Script-Path: /boot/boot.scr
+DTB-Id: sun5i-a10s-olinuxino-micro.dtb
+U-Boot-Script-Name: bootscr.sunxi
+Required-Packages: u-boot-tools
+
+Machine: Olimex A13-Olinuxino
+Kernel-Flavors: armmp
+Boot-Script-Path: /boot/boot.scr
+DTB-Id: sun5i-a13-olinuxino.dtb
+U-Boot-Script-Name: bootscr.sunxi
+Required-Packages: u-boot-tools
+
+Machine: Olimex A13-Olinuxino Micro
+Kernel-Flavors: armmp
+Boot-Script-Path: /boot/boot.scr
+DTB-Id: sun5i-a13-olinuxino-micro.dtb
+U-Boot-Script-Name: bootscr.sunxi
+Required-Packages: u-boot-tools
+
+Machine: Olimex A20-OLinuXino-LIME
+Kernel-Flavors: armmp armmp-lpae
+Boot-Script-Path: /boot/boot.scr
+DTB-Id: sun7i-a20-olinuxino-lime.dtb
+U-Boot-Script-Name: bootscr.sunxi
+Required-Packages: u-boot-tools
+
+Machine: Olimex A20-OLinuXino-LIME2
+Kernel-Flavors: armmp armmp-lpae
+Boot-Script-Path: /boot/boot.scr
+DTB-Id: sun7i-a20-olinuxino-lime2.dtb
+U-Boot-Script-Name: bootscr.sunxi
+Required-Packages: u-boot-tools
+
+Machine: Olimex A20-Olinuxino Micro
+Kernel-Flavors: armmp armmp-lpae
+Boot-Script-Path: /boot/boot.scr
+DTB-Id: sun7i-a20-olinuxino-micro.dtb
+U-Boot-Script-Name: bootscr.sunxi
+Required-Packages: u-boot-tools
+
+Machine: OMAP4 Panda board
+Method: generic
+U-Boot-Kernel-Address: 0x80008000
+U-Boot-Initrd-Address: 0x0
+U-Boot-Script-Address: 0x0
+U-Boot-Script-Name: bootscr.omap
+Boot-Device: /dev/mmcblk0p1
+Boot-Kernel-Path: uImage
+Boot-Initrd-Path: uInitrd
+Boot-Script-Path: boot.scr
+Required-Packages: u-boot-tools
+
+Machine: PineRiver Mini X-Plus
+Kernel-Flavors: armmp
+Boot-Script-Path: /boot/boot.scr
+DTB-Id: sun4i-a10-mini-xplus.dtb
+U-Boot-Script-Name: bootscr.sunxi
+Required-Packages: u-boot-tools
+
+Machine: PlatHome OpenBlocks AX3-4 board
+Kernel-Flavors: armmp
+DTB-Id: armada-xp-openblocks-ax3-4.dtb
+DTB-Append: yes
+U-Boot-Kernel-Address: 0x2000000
+U-Boot-Kernel-Entry-Point: 0x2000040
+U-Boot-Initrd-Address: 0x0
+Boot-Device: /dev/sda1
+Boot-Kernel-Path: /boot/uImage
+Boot-Initrd-Path: /boot/uInitrd
+Boot-DTB-Path: /boot/dtb
+Required-Packages: u-boot-tools
+
+Machine: Plat'Home OpenBlocksA6
+Kernel-Flavors: kirkwood
+DTB-Id: kirkwood-openblocks_a6.dtb
+DTB-Append: yes
+U-Boot-Kernel-Address: 0x00008000
+U-Boot-Initrd-Address: 0x0
+Boot-Device: /dev/sda1
+Boot-Kernel-Path: /boot/uImage
+Boot-Initrd-Path: /boot/uInitrd
+Boot-DTB-Path: /boot/dtb
+Required-Packages: u-boot-tools
+
+Machine: QNAP TS-109/TS-209
+Kernel-Flavors: orion5x
+Machine-Id: 1565
+Mtd-Kernel: Kernel
+Mtd-Initrd: RootFS1
+U-Boot-Kernel-Address: 0x00008000
+Required-Packages: u-boot-tools
+Bootloader-Sets-Incorrect-Root: yes
+
+Machine: QNAP TS-119/TS-219
+Kernel-Flavors: kirkwood
+Machine-Id: 2139
+Mtd-Kernel: Kernel
+Mtd-Initrd: RootFS1
+U-Boot-Kernel-Address: 0x00008000
+Required-Packages: u-boot-tools
+Bootloader-Sets-Incorrect-Root: yes
+
+Machine: QNAP TS-409
+Kernel-Flavors: orion5x
+Machine-Id: 1601
+Mtd-Kernel: Kernel
+Mtd-Initrd: RootFS1
+U-Boot-Kernel-Address: 0x00008000
+Required-Packages: u-boot-tools
+Bootloader-Sets-Incorrect-Root: yes
+
+Machine: QNAP TS-41x
+Kernel-Flavors: kirkwood
+Machine-Id: 2502
+Mtd-Kernel: Kernel
+Mtd-Initrd: RootFS1
+U-Boot-Kernel-Address: 0x00008000
+Required-Packages: u-boot-tools
+Bootloader-Sets-Incorrect-Root: yes
+
+Machine: Seagate FreeAgent Dockstar
+Machine: Seagate FreeAgent DockStar
+Kernel-Flavors: kirkwood
+DTB-Id: kirkwood-dockstar.dtb
+DTB-Append: yes
+U-Boot-Kernel-Address: 0x00008000
+U-Boot-Initrd-Address: 0x0
+Boot-Kernel-Path: /boot/uImage
+Boot-Initrd-Path: /boot/uInitrd
+Boot-DTB-Path: /boot/dtb
+Required-Packages: u-boot-tools
+
+Machine: Thecus N2100
+Method: redboot
+Kernel-Flavors: iop32x
+Machine-Id: 1101
+Mtd-Kernel: kernel
+Mtd-Initrd: ramdisk
+Bootloader-Sets-Incorrect-Root: yes
+
+Machine: TI AM335x BeagleBone
+Machine: TI AM335x BeagleBone Black
+Kernel-Flavors: armmp
+DTB-Id: am335x-boneblack.dtb
+Boot-Script-Path: /boot/boot.scr
+U-Boot-Script-Name: bootscr.beaglebone
+Required-Packages: u-boot-tools
+
+Machine: TI OMAP5 uEVM board
+Kernel-Flavors: armmp armmp-lpae
+DTB-Id: omap5-uevm.dtb
+U-Boot-Script-Name: bootscr.uboot-generic
+Boot-Script-Path: /boot/boot.scr
+Required-Packages: u-boot-tools
+
+Machine: Toshiba AC100 / Dynabook AZ
+Method: android
+Android-Boot-Device: /dev/mmcblk0
+Required-Packages: abootimg
+
+Machine: Wandboard i.MX6 Dual Lite Board
+Kernel-Flavors: armmp
+DTB-Id: imx6dl-wandboard.dtb
+Boot-Script-Path: /boot/boot.scr
+U-Boot-Script-Name: bootscr.wandboard
+Required-Packages: u-boot-tools
+
+Machine: Wandboard i.MX6 Quad Board
+Kernel-Flavors: armmp
+DTB-Id: imx6q-wandboard.dtb
+Boot-Script-Path: /boot/boot.scr
+U-Boot-Script-Name: bootscr.wandboard
+Required-Packages: u-boot-tools
+
+Machine: WITS A31 Colombus Evaluation Board
+Kernel-Flavors: armmp armmp-lpae
+Boot-Script-Path: /boot/boot.scr
+DTB-Id: sun6i-a31-colombus.dtb
+U-Boot-Script-Name: bootscr.sunxi
+Required-Packages: u-boot-tools
