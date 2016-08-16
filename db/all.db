@@ -682,10 +682,10 @@ DTB-Id: armada-370-mirabox.dtb
 DTB-Append: yes
 U-Boot-Kernel-Address: 0x00008000
 U-Boot-Initrd-Address: 0x0
-Boot-Device: /dev/sdb1
-Boot-Kernel-Path: uImage
-Boot-Initrd-Path: uInitrd
-Boot-DTB-Path: dtb
+Boot-Device:
+Boot-Kernel-Path: /boot/firmware/uImage
+Boot-Initrd-Path: /boot/firmware/uInitrd
+Boot-DTB-Path: /boot/firmware/dtb
 Required-Packages: u-boot-tools
 
 Machine: Marvell GuruPlug Reference Board
@@ -1051,6 +1051,33 @@ Mtd-Initrd: RootFS1
 U-Boot-Kernel-Address: 0x00008000
 Required-Packages: u-boot-tools
 Bootloader-Sets-Incorrect-Root: yes
+
+Machine: Raspberry Pi Model B
+Machine: Raspberry Pi Model B Rev 1
+Machine: Raspberry Pi Model B Rev 2
+DTB-Id: bcm2835-rpi-b.dtb
+Boot-Kernel-Path: /boot/firmware/kernel.img
+Boot-DTB-Path: /boot/firmware/bcm2835-rpi-b.dtb
+
+Machine: Raspberry Pi Model B Plus
+Machine: Raspberry Pi Model B Plus Rev 1.0
+Machine: Raspberry Pi Model B Plus Rev 1.1
+Machine: Raspberry Pi Model B Plus Rev 1.2
+DTB-Id: bcm2835-rpi-b-plus.dtb
+Boot-Kernel-Path: /boot/firmware/kernel.img
+Boot-DTB-Path: /boot/firmware/bcm2835-rpi-b-plus.dtb
+
+Machine: Raspberry Pi 2 Model B
+Machine: Raspberry Pi 2 Model B Rev 1.0
+Machine: Raspberry Pi 2 Model B Rev 1.1
+DTB-Id: bcm2836-rpi-2-b.dtb
+Boot-Kernel-Path: /boot/firmware/kernel7.img
+Boot-DTB-Path: /boot/firmware/bcm2836-rpi-2-b.dtb
+
+Machine: Raspberry Pi 3 Model B Rev 1.2
+DTB-Id: bcm2837-rpi-3-b.dtb
+Boot-Kernel-Path: /boot/firmware/kernel7.img
+Boot-DTB-Path: /boot/firmware/bcm2837-rpi-3-b.dtb
 
 Machine: R7 A10s hdmi tv-stick
 Kernel-Flavors: armmp
